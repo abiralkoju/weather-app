@@ -9,12 +9,14 @@ const form = document.querySelector("form");
 
 let target = "kathmandu";
 
+//Function to fetch Data from Weather API
 const fetchData = async (target) => {
   try {
     const url = `https://api.weatherapi.com/v1/current.json?key=e83f9adc007e4969b91133344232207&q=${target}`;
     const response = await fetch(url);
     const data = await response.json();
 
+    //Destructuring
     const {
       current: {
         temp_c,
@@ -23,6 +25,7 @@ const fetchData = async (target) => {
       location: { name, localtime },
     } = data;
 
+    // Calling update DOM function
     //   updateData(data.current.temp_c, data.location.name);
     updateData(temp_c, name, localtime, icon, text);
   } catch (error) {
@@ -32,6 +35,7 @@ const fetchData = async (target) => {
 
 fetchData(target);
 
+// Function to update DOM
 const updateData = (temperature, cityName, time, emoji, type) => {
   temperateField.innerText = temperature + "°C";
   cityField.innerText = cityName;
@@ -46,6 +50,7 @@ const updateData = (temperature, cityName, time, emoji, type) => {
   weatherField.innerText = type;
 };
 
+// Function to get name of the day
 function getFullDay(num) {
   switch (num) {
     case 0:
@@ -67,9 +72,12 @@ function getFullDay(num) {
   }
 }
 
-form.addEventListener("submit", (e) => {
+// Function to search the location
+function search(e) {
   e.preventDefault();
   let target = searchField.value;
 
   fetchData(target);
-});
+}
+
+form.addEventListener("submit", search);
